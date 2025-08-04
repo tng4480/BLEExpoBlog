@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
@@ -14,7 +15,9 @@ const App = () => {
     allDevices,
     connectedDevice,
     connectToDevice,
+    disconnectDevice,
     color,
+    isConnecting,
     requestPermissions,
     scanForPeripherals,
   } = useBLE();
@@ -36,22 +39,58 @@ const App = () => {
     setIsModalVisible(true);
   };
 
+  const handleDisconnect = () => {
+    disconnectDevice();
+  };
+
+  const renderConnectionStatus = () => {
+    if (isConnecting) {
+      return (
+        <View style={styles.statusContainer}>
+          <ActivityIndicator size="large" color="#FF6060" />
+          <Text style={styles.heartRateTitleText}>Connecting...</Text>
+        </View>
+      );
+    }
+
+    if (connectedDevice) {
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={styles.heartRateTitleText}>Connected to QBike Lock</Text>
+          <Text style={styles.deviceNameText}>
+            {connectedDevice.name || connectedDevice.id}
+          </Text>
+          <TouchableOpacity 
+            onPress={handleDisconnect} 
+            style={[styles.ctaButton, styles.disconnectButton]}
+          >
+            <Text style={styles.ctaButtonText}>Disconnect</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.statusContainer}>
+        <Text style={styles.heartRateTitleText}>
+          Please connect to your QBike Lock
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
       <View style={styles.heartRateTitleWrapper}>
-        {connectedDevice ? (
-          <>
-            <Text style={styles.heartRateTitleText}>Connected</Text>
-          </>
-        ) : (
-          <Text style={styles.heartRateTitleText}>
-            Please connect the Arduino
-          </Text>
-        )}
+        {renderConnectionStatus()}
       </View>
-      <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
-        <Text style={styles.ctaButtonText}>Connect</Text>
-      </TouchableOpacity>
+
+      {!connectedDevice && !isConnecting && (
+        <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
+          <Text style={styles.ctaButtonText}>Connect Device</Text>
+        </TouchableOpacity>
+      )}
+
       <DeviceModal
         closeModal={hideModal}
         visible={isModalVisible}
@@ -72,12 +111,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  statusContainer: {
+    alignItems: "center",
+  },
   heartRateTitleText: {
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
     marginHorizontal: 20,
     color: "black",
+  },
+  deviceNameText: {
+    fontSize: 18,
+    marginTop: 10,
+    color: "#666",
+    textAlign: "center",
   },
   heartRateText: {
     fontSize: 25,
@@ -91,6 +139,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 5,
     borderRadius: 8,
+  },
+  disconnectButton: {
+    backgroundColor: "#666",
+    marginTop: 20,
+    marginHorizontal: 0,
+    paddingHorizontal: 30,
   },
   ctaButtonText: {
     fontSize: 18,
