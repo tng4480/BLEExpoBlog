@@ -5,6 +5,7 @@ import base64 from "react-native-base64";
 import { BleError, BleManager, Characteristic, Device } from "react-native-ble-plx";
 import { Buffer } from "buffer";
 import { ScanMode } from "react-native-ble-plx";
+import Beacons from 'react-native-beacons-manager';
 
 
 const DATA_SERVICE_UUID = "00001548-1212-efde-1523-785feabcd123";

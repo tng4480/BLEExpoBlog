@@ -1,0 +1,287 @@
+diff --git a/node_modules/react-native-beacons-manager/android/.classpath b/node_modules/react-native-beacons-manager/android/.classpath
+new file mode 100644
+index 0000000..bbe97e5
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/.classpath
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<classpath>
++	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
++	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
++	<classpathentry kind="output" path="bin/default"/>
++</classpath>
+diff --git a/node_modules/react-native-beacons-manager/android/.project b/node_modules/react-native-beacons-manager/android/.project
+index 3964dd3..e1650d7 100644
+--- a/node_modules/react-native-beacons-manager/android/.project
++++ b/node_modules/react-native-beacons-manager/android/.project
+@@ -1,10 +1,15 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <projectDescription>
+-	<name>android</name>
++	<name>react-native-beacons-manager</name>
+ 	<comment>Project android created by Buildship.</comment>
+ 	<projects>
+ 	</projects>
+ 	<buildSpec>
++		<buildCommand>
++			<name>org.eclipse.jdt.core.javabuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
+ 		<buildCommand>
+ 			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
+ 			<arguments>
+@@ -12,6 +17,7 @@
+ 		</buildCommand>
+ 	</buildSpec>
+ 	<natures>
++		<nature>org.eclipse.jdt.core.javanature</nature>
+ 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
+ 	</natures>
+ </projectDescription>
+diff --git a/node_modules/react-native-beacons-manager/android/.settings/org.eclipse.buildship.core.prefs b/node_modules/react-native-beacons-manager/android/.settings/org.eclipse.buildship.core.prefs
+index 65245d0..1675490 100644
+--- a/node_modules/react-native-beacons-manager/android/.settings/org.eclipse.buildship.core.prefs
++++ b/node_modules/react-native-beacons-manager/android/.settings/org.eclipse.buildship.core.prefs
+@@ -1,3 +1,2 @@
+-#Tue Aug 15 09:41:57 CEST 2017
++connection.project.dir=../../../android
+ eclipse.preferences.version=1
+-connection.project.dir=
+diff --git a/node_modules/react-native-beacons-manager/android/build.gradle b/node_modules/react-native-beacons-manager/android/build.gradle
+index 9b366a2..6a2172a 100644
+--- a/node_modules/react-native-beacons-manager/android/build.gradle
++++ b/node_modules/react-native-beacons-manager/android/build.gradle
+@@ -11,12 +11,12 @@ buildscript {
+ apply plugin: 'com.android.library'
+ 
+ android {
+-    compileSdkVersion 23
++    compileSdkVersion 31
+     buildToolsVersion "23.0.1"
+ 
+     defaultConfig {
+-        minSdkVersion 16
+-        targetSdkVersion 23
++        minSdkVersion 30
++        targetSdkVersion 31
+         versionCode 1
+         versionName "1.0"
+     }
+@@ -27,7 +27,7 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile fileTree(dir: 'libs', include: ['*.jar'])
+-    compile 'com.facebook.react:react-native:0.12.+'
+-    compile 'org.altbeacon:android-beacon-library:2.9.2'
++    implementation fileTree(dir: 'libs', include: ['*.jar'])
++    implementation 'com.facebook.react:react-native:+'
++    implementation 'org.altbeacon:android-beacon-library:2.9.2'
+ }
+diff --git a/node_modules/react-native-beacons-manager/android/build/generated/source/buildConfig/debug/com/mackentoch/beaconsandroid/BuildConfig.java b/node_modules/react-native-beacons-manager/android/build/generated/source/buildConfig/debug/com/mackentoch/beaconsandroid/BuildConfig.java
+new file mode 100644
+index 0000000..5a5b862
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/generated/source/buildConfig/debug/com/mackentoch/beaconsandroid/BuildConfig.java
+@@ -0,0 +1,10 @@
++/**
++ * Automatically generated file. DO NOT MODIFY
++ */
++package com.mackentoch.beaconsandroid;
++
++public final class BuildConfig {
++  public static final boolean DEBUG = Boolean.parseBoolean("true");
++  public static final String LIBRARY_PACKAGE_NAME = "com.mackentoch.beaconsandroid";
++  public static final String BUILD_TYPE = "debug";
++}
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml b/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml
+new file mode 100644
+index 0000000..3eb73f6
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.mackentoch.beaconsandroid" >
++
++    <uses-sdk android:minSdkVersion="30" />
++
++    <uses-permission android:name="android.permission.BLUETOOTH" />
++    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json b/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json
+new file mode 100644
+index 0000000..50affa2
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json
+@@ -0,0 +1,18 @@
++{
++  "version": 3,
++  "artifactType": {
++    "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
++    "kind": "Directory"
++  },
++  "applicationId": "com.mackentoch.beaconsandroid",
++  "variantName": "debug",
++  "elements": [
++    {
++      "type": "SINGLE",
++      "filters": [],
++      "attributes": [],
++      "outputFile": "AndroidManifest.xml"
++    }
++  ],
++  "elementType": "File"
++}
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/aar_metadata/debug/aar-metadata.properties b/node_modules/react-native-beacons-manager/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+new file mode 100644
+index 0000000..1211b1e
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+@@ -0,0 +1,6 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
++minCompileSdk=1
++minCompileSdkExtension=0
++minAndroidGradlePluginVersion=1.0.0
++coreLibraryDesugaringEnabled=false
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json b/node_modules/react-native-beacons-manager/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json
+new file mode 100644
+index 0000000..9e26dfe
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json
+@@ -0,0 +1 @@
++{}
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/compile_r_class_jar/debug/R.jar b/node_modules/react-native-beacons-manager/android/build/intermediates/compile_r_class_jar/debug/R.jar
+new file mode 100644
+index 0000000..3aa4bfd
+Binary files /dev/null and b/node_modules/react-native-beacons-manager/android/build/intermediates/compile_r_class_jar/debug/R.jar differ
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/compile_symbol_list/debug/R.txt b/node_modules/react-native-beacons-manager/android/build/intermediates/compile_symbol_list/debug/R.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+new file mode 100644
+index 0000000..76e4198
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+@@ -0,0 +1 @@
++#Wed Aug 13 22:43:24 BST 2025
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+new file mode 100644
+index 0000000..09700c1
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\build\generated\res\resValues\debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\build\generated\res\resValues\debug"/></dataSet><mergedItems/></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/local_only_symbol_list/debug/R-def.txt b/node_modules/react-native-beacons-manager/android/build/intermediates/local_only_symbol_list/debug/R-def.txt
+new file mode 100644
+index 0000000..78ac5b8
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/local_only_symbol_list/debug/R-def.txt
+@@ -0,0 +1,2 @@
++R_DEF: Internal format may change without notice
++local
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt b/node_modules/react-native-beacons-manager/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt
+new file mode 100644
+index 0000000..e145d7e
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt
+@@ -0,0 +1,14 @@
++1<?xml version="1.0" encoding="utf-8"?>
++2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++3    package="com.mackentoch.beaconsandroid" >
++4
++5    <uses-sdk android:minSdkVersion="30" />
++6
++7    <uses-permission android:name="android.permission.BLUETOOTH" />
++7-->C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:2:5-67
++7-->C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:2:22-65
++8    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
++8-->C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:3:5-73
++8-->C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:3:22-71
++9
++10</manifest>
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml b/node_modules/react-native-beacons-manager/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml
+new file mode 100644
+index 0000000..3eb73f6
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.mackentoch.beaconsandroid" >
++
++    <uses-sdk android:minSdkVersion="30" />
++
++    <uses-permission android:name="android.permission.BLUETOOTH" />
++    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/navigation_json/debug/navigation.json b/node_modules/react-native-beacons-manager/android/build/intermediates/navigation_json/debug/navigation.json
+new file mode 100644
+index 0000000..0637a08
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/navigation_json/debug/navigation.json
+@@ -0,0 +1 @@
++[]
+\ No newline at end of file
+diff --git a/node_modules/react-native-beacons-manager/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt b/node_modules/react-native-beacons-manager/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt
+new file mode 100644
+index 0000000..f4f2948
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt
+@@ -0,0 +1 @@
++com.mackentoch.beaconsandroid
+diff --git a/node_modules/react-native-beacons-manager/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/react-native-beacons-manager/android/build/outputs/logs/manifest-merger-debug-report.txt
+new file mode 100644
+index 0000000..f8081e8
+--- /dev/null
++++ b/node_modules/react-native-beacons-manager/android/build/outputs/logs/manifest-merger-debug-report.txt
+@@ -0,0 +1,25 @@
++-- Merging decision tree log ---
++manifest
++ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:1:1-4:12
++INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:1:1-4:12
++	package
++		ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:1:70-109
++		INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml
++	xmlns:android
++		ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:1:11-69
++uses-permission#android.permission.BLUETOOTH
++ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:2:5-67
++	android:name
++		ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:2:22-65
++uses-permission#android.permission.BLUETOOTH_ADMIN
++ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:3:5-73
++	android:name
++		ADDED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml:3:22-71
++uses-sdk
++INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
++INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml
++INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml
++	android:targetSdkVersion
++		INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml
++	android:minSdkVersion
++		INJECTED from C:\Users\tejas\Qbikes-software\BLEExpoBlog-1\node_modules\react-native-beacons-manager\android\src\main\AndroidManifest.xml
+diff --git a/node_modules/react-native-beacons-manager/android/src/main/java/com/mackentoch/beaconsandroid/BeaconsAndroidModule.java b/node_modules/react-native-beacons-manager/android/src/main/java/com/mackentoch/beaconsandroid/BeaconsAndroidModule.java
+index e22c157..96c63d2 100644
+--- a/node_modules/react-native-beacons-manager/android/src/main/java/com/mackentoch/beaconsandroid/BeaconsAndroidModule.java
++++ b/node_modules/react-native-beacons-manager/android/src/main/java/com/mackentoch/beaconsandroid/BeaconsAndroidModule.java
+@@ -4,8 +4,8 @@ import android.content.Context;
+ import android.content.Intent;
+ import android.content.ServiceConnection;
+ import android.os.RemoteException;
+-import android.support.annotation.Nullable;
+ import android.util.Log;
++import androidx.annotation.Nullable;
+ 
+ import com.facebook.react.bridge.Callback;
+ import com.facebook.react.bridge.ReactApplicationContext;

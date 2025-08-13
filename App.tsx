@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useEffect } from 'react';
+import { Platform, DeviceEventEmitter } from 'react-native';
+import Beacons from 'react-native-beacons-manager';
+import PushNotification from 'react-native-push-notification';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,6 +14,44 @@ import {
 import useBLE from "./useBLE";
 
 const App = () => {
+    useEffect(() => {
+  if (Platform.OS === 'android') {
+    Beacons.detectIBeacons();
+    Beacons.setForegroundScanPeriod(1100);
+    Beacons.setBackgroundScanPeriod(1100);
+    Beacons.setBackgroundBetweenScanPeriod(0);
+  }
+
+  const region = {
+    identifier: 'QBikeLock',
+    uuid: '18ee1516-016b-4bec-ad96-bcb96d166e97'
+  };
+
+  Beacons.startMonitoringForRegion(region)
+    .then(() => console.log('Monitoring started'))
+    .catch(console.error);
+
+  const enterSub = DeviceEventEmitter.addListener('regionDidEnter', () => {
+    const state = AppState.currentState;
+    console.log(`Found beacon at ${new Date().toLocaleTimeString()} | AppState: ${state}`);
+
+    PushNotification.localNotification({
+      title: 'Lock Nearby',
+      message: `Your QBike Lock is in range! (state: ${state})`,
+    });
+  });
+
+  const exitSub = DeviceEventEmitter.addListener('regionDidExit', (data) => {
+    const state = AppState.currentState;
+    console.log(`Exited beacon region at ${new Date().toLocaleTimeString()} | AppState: ${state}`);
+  });
+
+  return () => {
+    Beacons.stopMonitoringForRegion(region);
+    enterSub.remove();
+    exitSub.remove();
+  };
+}, []);
   const {
     connectedDevice,
     isScanning,
@@ -27,6 +69,8 @@ const App = () => {
   const handleDisconnect = () => {
     disconnectDevice();
   };
+
+
 
   const renderConnectionStatus = () => {
     if (isScanning) {
