@@ -13,7 +13,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.wa2goose.BLEExpoBlog"
+      "bundleIdentifier": "com.wa2goose.BLEExpoBlog",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "This app needs Bluetooth access to connect to your QBike Lock",
+        "NSBluetoothPeripheralUsageDescription": "This app needs Bluetooth access to connect to your QBike Lock",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -42,6 +47,11 @@
           "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4a7a4f49-a93b-49c3-98c6-3a35b1048750"
+      }
+    }
   }
 }

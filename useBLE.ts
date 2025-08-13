@@ -1,9 +1,11 @@
 import { PermissionsAndroid, Platform } from "react-native";
-import { useMemo, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
 import { BleError, BleManager, Characteristic, Device } from "react-native-ble-plx";
 import { Buffer } from "buffer";
+import { ScanMode } from "react-native-ble-plx";
+
 
 const DATA_SERVICE_UUID = "00001548-1212-efde-1523-785feabcd123";
 const READ_CHARACTERISTIC_UUID = "00001528-1212-efde-1523-785feabcd123";
@@ -12,9 +14,8 @@ const WRITE_CHARACTERISTIC_UUID = "00001526-1212-efde-1523-785feabcd123";
 const bleManager = new BleManager();
 
 function useBLE() {
-  const [allDevices, setAllDevices] = useState<Device[]>([]);
   const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
-  const [color, setColor] = useState("white");
+  const [isScanning, setIsScanning] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   
   // Keep track of polling interval to clean up properly
@@ -23,8 +24,8 @@ function useBLE() {
   // Reset all state when device disconnects
   const resetState = () => {
     setConnectedDevice(null);
-    setColor("white");
     setIsConnecting(false);
+    setIsScanning(false);
     
     // Clear any existing polling interval
     if (pollingIntervalRef.current) {
@@ -39,6 +40,7 @@ function useBLE() {
       if (pollingIntervalRef.current) {
         clearInterval(pollingIntervalRef.current);
       }
+      bleManager.stopDeviceScan();
     };
   }, []);
 
@@ -76,7 +78,11 @@ function useBLE() {
   };
 
   const requestPermissions = async () => {
-    if (Platform.OS === "android") {
+    if (Platform.OS === "ios") {
+      // iOS handles Bluetooth permissions automatically when BLE is accessed
+      // The system will show permission prompts as needed
+      return true;
+    } else if (Platform.OS === "android") {
       if ((ExpoDevice.platformApiLevel ?? -1) < 31) {
         const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -90,9 +96,8 @@ function useBLE() {
       } else {
         return await requestAndroid31Permissions();
       }
-    } else {
-      return true;
     }
+    return false;
   };
 
   const connectToDevice = async (device: Device) => {
@@ -110,6 +115,7 @@ function useBLE() {
       console.log("Services and characteristics discovered");
       
       bleManager.stopDeviceScan();
+      setIsScanning(false);
 
       // Set up disconnect listener BEFORE starting data streaming
       deviceConnection.onDisconnected((error, disconnectedDevice) => {
@@ -144,16 +150,23 @@ function useBLE() {
     }
   };
 
-  const isDuplicateDevice = (devices: Device[], nextDevice: Device) =>
-    devices.findIndex((device) => nextDevice.id === device.id) > -1;
-
-  const scanForPeripherals = () => {
-    // Clear previous devices when starting a new scan
-    setAllDevices([]);
+  // Auto-scan and connect to first QBike Lock found
+  const scanAndConnect = async () => {
+    if (isScanning || isConnecting || connectedDevice) return;
     
-    bleManager.startDeviceScan(null, null, (error, device) => {
+    const isPermissionsEnabled = await requestPermissions();
+    if (!isPermissionsEnabled) {
+      console.log("Permissions not granted");
+      return;
+    }
+
+    setIsScanning(true);
+    console.log("Starting scan for QBike Lock...");
+    
+    bleManager.startDeviceScan(null, Platform.OS === "android" ? { scanMode: ScanMode.LowLatency } : null, (error, device) => {
       if (error) {
         console.log("Scan error:", error);
+        setIsScanning(false);
         return;
       }
 
@@ -161,50 +174,14 @@ function useBLE() {
         device &&
         (device.localName === "QBike Lock" || device.name === "QBike Lock")
       ) {
-        setAllDevices((prevState: Device[]) => {
-          if (!isDuplicateDevice(prevState, device)) {
-            console.log("Found QBike Lock:", device.name || device.id);
-            return [...prevState, device];
-          }
-          return prevState;
-        });
+        console.log("Found QBike Lock! Auto-connecting...", device.name || device.id);
+        
+        // Stop scanning and connect immediately
+        bleManager.stopDeviceScan();
+        setIsScanning(false);
+        connectToDevice(device);
       }
     });
-  };
-
-  const onDataUpdate = (
-    error: BleError | null,
-    characteristic: Characteristic | null
-  ) => {
-    if (error) {
-      console.log("Data update error:", error);
-      return;
-    } 
-    
-    if (!characteristic?.value) {
-      console.log("No data was received");
-      return;
-    }
-
-    const colorCode = base64.decode(characteristic.value);
-    console.log("Received color code:", colorCode);
-
-    let newColor = "white";
-    switch (colorCode) {
-      case "B":
-        newColor = "blue";
-        break;
-      case "R":
-        newColor = "red";
-        break;
-      case "G":
-        newColor = "green";
-        break;
-      default:
-        newColor = "white";
-    }
-
-    setColor(newColor);
   };
 
   const startStreamingData = async (device: Device) => {
@@ -260,6 +237,7 @@ function useBLE() {
     };
 
     // Initial read/write
+    console.log("Performing initial read/write...");
     await readAndWriteData();
 
     // Set up polling interval
@@ -268,15 +246,12 @@ function useBLE() {
   };
 
   return {
-    connectToDevice,
-    disconnectDevice, // New function to manually disconnect
-    allDevices,
     connectedDevice,
-    color,
-    isConnecting, // New state to show connection status
+    isScanning,
+    isConnecting,
+    scanAndConnect, // New function to auto-scan and connect
+    disconnectDevice,
     requestPermissions,
-    scanForPeripherals,
-    startStreamingData,
   };
 }
 

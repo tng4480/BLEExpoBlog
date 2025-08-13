@@ -7,36 +7,21 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import DeviceModal from "./DeviceConnectionModal";
 import useBLE from "./useBLE";
 
 const App = () => {
   const {
-    allDevices,
     connectedDevice,
-    connectToDevice,
-    disconnectDevice,
-    color,
+    isScanning,
     isConnecting,
+    scanAndConnect,
+    disconnectDevice,
     requestPermissions,
-    scanForPeripherals,
   } = useBLE();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
-  const scanForDevices = async () => {
-    const isPermissionsEnabled = await requestPermissions();
-    if (isPermissionsEnabled) {
-      scanForPeripherals();
-    }
-  };
-
-  const hideModal = () => {
-    setIsModalVisible(false);
-  };
-
-  const openModal = async () => {
-    scanForDevices();
-    setIsModalVisible(true);
+  const handleScanAndConnect = () => {
+    scanAndConnect();
   };
 
   const handleDisconnect = () => {
@@ -44,11 +29,20 @@ const App = () => {
   };
 
   const renderConnectionStatus = () => {
+    if (isScanning) {
+      return (
+        <View style={styles.statusContainer}>
+          <ActivityIndicator size="large" color="#FF6060" />
+          <Text style={styles.heartRateTitleText}>Scanning for QBike Lock...</Text>
+        </View>
+      );
+    }
+
     if (isConnecting) {
       return (
         <View style={styles.statusContainer}>
           <ActivityIndicator size="large" color="#FF6060" />
-          <Text style={styles.heartRateTitleText}>Connecting...</Text>
+          <Text style={styles.heartRateTitleText}>Unlocking...</Text>
         </View>
       );
     }
@@ -80,23 +74,18 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: color }]}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.heartRateTitleWrapper}>
         {renderConnectionStatus()}
       </View>
 
-      {!connectedDevice && !isConnecting && (
-        <TouchableOpacity onPress={openModal} style={styles.ctaButton}>
-          <Text style={styles.ctaButtonText}>Connect Device</Text>
+      {!connectedDevice && !isConnecting && !isScanning && (
+        <TouchableOpacity onPress={handleScanAndConnect} style={styles.ctaButton}>
+          <Text style={styles.ctaButtonText}>Find & Connect QBike Lock</Text>
         </TouchableOpacity>
       )}
 
-      <DeviceModal
-        closeModal={hideModal}
-        visible={isModalVisible}
-        connectToPeripheral={connectToDevice}
-        devices={allDevices}
-      />
+      {/* Remove the DeviceModal since we auto-connect now */}
     </SafeAreaView>
   );
 };
